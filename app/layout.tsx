@@ -7,12 +7,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = {
-  title: "Groove Web",
+  title: "Goove Web",
   description: "Responsive web panel for RGBIC lights with LAN-ready architecture.",
-  applicationName: "Groove Web",
+  applicationName: "Goove Web",
   appleWebApp: {
     capable: true,
-    title: "Groove Web",
+    title: "Goove Web",
     statusBarStyle: "default",
   },
   formatDetection: {

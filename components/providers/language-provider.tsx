@@ -14,7 +14,7 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null)
 
-const STORAGE_KEY = "groove-language"
+const STORAGE_KEY = "Goove-language"
 
 type LanguageProviderProps = {
   children: React.ReactNode

@@ -1,4 +1,4 @@
-# Groove Web
+# Goove Web
 
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![Next.js](https://img.shields.io/badge/next.js-16-black?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
@@ -6,13 +6,13 @@
 [![Lint](https://img.shields.io/badge/lint-eslint-4B32C3?logo=eslint&logoColor=white)](https://eslint.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](./LICENSE)
 
-Groove Web is a responsive web control panel for RGBIC lights, inspired by the Govee app experience and designed for LAN-first device control.  
+Goove Web is a responsive web control panel for RGBIC lights, inspired by the Govee app experience and designed for LAN-first device control.  
 It provides a modular frontend architecture that can evolve from mock-based development to real network transport with minimal UI coupling.
 
 ## Why this project exists
 
 Most mobile-first smart lighting apps provide polished UX but limited desktop workflows and weak interoperability for local automation.  
-Groove Web addresses this gap with:
+Goove Web addresses this gap with:
 
 - A desktop and mobile-friendly control surface
 - An internal API boundary between UI and device transport
@@ -34,7 +34,7 @@ Groove Web addresses this gap with:
 
 ## Architecture at a glance
 
-Groove Web follows a layered structure:
+Goove Web follows a layered structure:
 
 1. **Presentation layer** (`app`, `components`)  
    User interface and interaction flows.

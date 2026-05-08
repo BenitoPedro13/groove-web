@@ -2,7 +2,7 @@ export type Language = "pt" | "en"
 
 export const dictionaries = {
   pt: {
-    appName: "Groove",
+    appName: "Goove",
     navDashboard: "Dashboard",
     navDevices: "Dispositivos",
     navScenes: "Cenas",
@@ -60,7 +60,7 @@ export const dictionaries = {
     offState: "Desligado",
   },
   en: {
-    appName: "Groove",
+    appName: "Goove",
     navDashboard: "Dashboard",
     navDevices: "Devices",
     navScenes: "Scenes",
