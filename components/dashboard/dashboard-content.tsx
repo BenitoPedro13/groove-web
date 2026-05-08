@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ErrorState } from "@/components/common/error-state"
+import { SystemModeBadge } from "@/components/common/system-mode-badge"
 import { useLanguage } from "@/components/providers/language-provider"
 import { DeviceCard } from "@/components/devices/device-card"
 import { useLightStore } from "@/lib/state/use-light-store"
@@ -17,6 +18,9 @@ export function DashboardContent() {
       <header>
         <h1 className="text-2xl font-semibold">{t.dashboardTitle}</h1>
         <p className="text-sm text-muted-foreground">{t.dashboardSubtitle}</p>
+        <div className="mt-3">
+          <SystemModeBadge />
+        </div>
         <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
           <span>{t.lastSync}: {syncLabel}</span>
           <Button size="sm" variant="outline" onClick={() => void syncDevices()}>

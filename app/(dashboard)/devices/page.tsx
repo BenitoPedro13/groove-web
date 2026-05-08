@@ -1,6 +1,7 @@
 "use client"
 
 import { ErrorState } from "@/components/common/error-state"
+import { SystemModeBadge } from "@/components/common/system-mode-badge"
 import { useLanguage } from "@/components/providers/language-provider"
 import { DeviceCard } from "@/components/devices/device-card"
 import { Button } from "@/components/ui/button"
@@ -15,6 +16,9 @@ export default function DevicesPage() {
       <header>
         <h1 className="text-2xl font-semibold">{t.devicesTitle}</h1>
         <p className="text-sm text-muted-foreground">{t.devicesSubtitle}</p>
+        <div className="mt-3">
+          <SystemModeBadge />
+        </div>
         <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
           <span>
             {t.lastSync}: {syncLabel}

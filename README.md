@@ -161,19 +161,41 @@ Registers a manual device for LAN fallback scenarios.
 - `name` (optional)
 - `model` (optional)
 
+### `GET /api/system/status`
+
+Returns active LAN runtime mode flags used by the UI status indicator:
+
+- `adapterEnabled`
+- `transportMode` (`mock` | `udp`)
+- `discoveryMode` (`mock` | `udp`)
+- `debugEnabled`
+
 ## LAN adapter architecture
 
 The LAN control layer supports model-aware adapters:
 
 - `lib/govee/adapters/types.ts`: adapter contract
 - `lib/govee/adapters/registry.ts`: adapter resolution by model
-- `lib/govee/adapters/mock-rgbic-adapter.ts`: baseline adapter for `H6*` models
+- `lib/govee/adapters/h6-rgbic-adapter.ts`: baseline adapter for `H6*` models
+- `lib/govee/protocol/h6-commands.ts`: command builders
+- `lib/govee/protocol/discovery.ts`: discovery request/response helpers
+- `lib/govee/transport/udp.ts`: UDP transport helper
+- `lib/govee/transport/discovery-udp.ts`: UDP discovery helper
 
 You can disable adapter execution through:
 
 - `GOVEE_LAN_ADAPTER_ENABLED=false`
+- `GOVEE_LAN_TRANSPORT=mock|udp` (default: `mock`)
+- `GOVEE_LAN_UDP_PORT=4003` (optional override)
+- `GOVEE_LAN_DISCOVERY_MODE=mock|udp` (default: `mock`)
+- `GOVEE_LAN_DISCOVERY_PORT=4001` (optional override)
+- `GOVEE_LAN_DISCOVERY_BROADCAST=255.255.255.255` (optional override)
+- `GOVEE_LAN_DISCOVERY_TIMEOUT_MS=1200` (optional override)
+- `GOVEE_DEBUG=true|false` (default: `false`)
 
 When no adapter matches a model, the system falls back to in-memory patch behavior.
+When UDP discovery fails or returns no devices, the system safely falls back to mock devices.
+Dashboard and Devices pages display a live system-mode badge so users can verify whether runtime is mock or real LAN.
 
 ## Internationalization
 

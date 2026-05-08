@@ -3,6 +3,17 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { goveeLanClient, resetLanClientState } from "../lan-client"
 import { validateDeviceStatePatch, validateManualDeviceInput } from "../validators"
 import { listRegisteredAdapters, resolveAdapter } from "../adapters/registry"
+import { buildBrightnessCommand, buildColorCommand, buildPowerCommand } from "../protocol/h6-commands"
+import {
+  getLanDiscoveryBroadcastAddress,
+  getLanDiscoveryMode,
+  getLanDiscoveryPort,
+  getLanDiscoveryTimeoutMs,
+  isGoveeDebugEnabled,
+  getLanTransportMode,
+  getLanUdpPort,
+} from "../config"
+import { parseDiscoveryResponse } from "../protocol/discovery"
 
 describe("govee lan client", () => {
   beforeEach(() => {
@@ -46,6 +57,66 @@ describe("model adapter registry", () => {
 
   it("lists at least one registered adapter", () => {
     expect(listRegisteredAdapters().length).toBeGreaterThan(0)
+  })
+})
+
+describe("lan command builders", () => {
+  it("builds power command", () => {
+    const cmd = buildPowerCommand("on")
+    expect(cmd.msg.cmd).toBe("turn")
+    expect(cmd.msg.data.value).toBe(1)
+  })
+
+  it("builds brightness and color commands", () => {
+    const brightness = buildBrightnessCommand(68)
+    const color = buildColorCommand("#ffaa11")
+    expect(brightness.msg.cmd).toBe("brightness")
+    expect(color.msg.cmd).toBe("colorwc")
+  })
+})
+
+describe("lan config defaults", () => {
+  it("uses mock transport by default", () => {
+    expect(getLanTransportMode()).toBe("mock")
+  })
+
+  it("uses default govee UDP port", () => {
+    expect(getLanUdpPort()).toBe(4003)
+  })
+
+  it("uses mock discovery defaults", () => {
+    expect(getLanDiscoveryMode()).toBe("mock")
+    expect(getLanDiscoveryPort()).toBe(4001)
+    expect(getLanDiscoveryBroadcastAddress()).toBe("255.255.255.255")
+    expect(getLanDiscoveryTimeoutMs()).toBe(1200)
+  })
+
+  it("disables debug logs by default", () => {
+    expect(isGoveeDebugEnabled()).toBe(false)
+  })
+})
+
+describe("discovery protocol parser", () => {
+  it("parses a valid discovery response", () => {
+    const result = parseDiscoveryResponse(
+      JSON.stringify({
+        msg: {
+          cmd: "scan",
+          data: {
+            ip: "192.168.0.50",
+            sku: "H619C",
+            deviceName: "TV Backlight",
+          },
+        },
+      }),
+    )
+    expect(result?.ip).toBe("192.168.0.50")
+    expect(result?.model).toBe("H619C")
+  })
+
+  it("returns null for invalid discovery payload", () => {
+    const result = parseDiscoveryResponse("{invalid-json")
+    expect(result).toBeNull()
   })
 })
 
