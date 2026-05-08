@@ -65,7 +65,9 @@ export function useDeviceSync() {
       void syncDevices()
     }, 0)
     const interval = window.setInterval(() => {
-      void syncDevices()
+      if (document.visibilityState === "visible") {
+        void syncDevices()
+      }
     }, 15000)
     return () => {
       window.clearTimeout(initialSync)

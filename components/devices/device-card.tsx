@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Minus, Plus, Power } from "lucide-react"
 
 import { useLanguage } from "@/components/providers/language-provider"
@@ -17,6 +18,16 @@ type DeviceCardProps = {
 export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, onSetBrightness }: DeviceCardProps) {
   const { t } = useLanguage()
   const controlsDisabled = !device.online
+  const [draftBrightness, setDraftBrightness] = useState<number | null>(null)
+  const sliderValue = draftBrightness ?? device.brightness
+
+  const commitBrightness = () => {
+    const clamped = Math.max(0, Math.min(100, sliderValue))
+    if (clamped !== device.brightness) {
+      onSetBrightness(device, clamped)
+    }
+    setDraftBrightness(null)
+  }
 
   return (
     <article className="rounded-2xl border border-border/60 bg-card p-4 shadow-sm" aria-label={device.name}>
@@ -39,7 +50,7 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
       <div className="mb-4 flex items-center gap-3">
         <div className="size-6 rounded-full border border-border/60" style={{ backgroundColor: device.color }} />
         <p className="text-sm text-muted-foreground">
-          {device.power === "on" ? `${device.brightness}% ${t.brightness}` : t.off}
+          {device.power === "on" ? `${sliderValue}% ${t.brightness}` : t.off}
         </p>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -57,7 +68,11 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
         <Button
           size="icon"
           variant="secondary"
-          onClick={() => onChangeBrightnessByStep(device, -5)}
+          onClick={() => {
+            const next = Math.max(0, Math.min(100, sliderValue - 5))
+            setDraftBrightness(next)
+            onChangeBrightnessByStep(device, -5)
+          }}
           aria-label={t.decrease}
           disabled={controlsDisabled}
         >
@@ -68,8 +83,11 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
           min={0}
           max={100}
           step={1}
-          value={device.brightness}
-          onChange={(event) => onSetBrightness(device, Number(event.target.value))}
+          value={sliderValue}
+          onChange={(event) => setDraftBrightness(Number(event.target.value))}
+          onMouseUp={commitBrightness}
+          onTouchEnd={commitBrightness}
+          onKeyUp={commitBrightness}
           className="h-2 w-full cursor-pointer accent-primary"
           aria-label={t.brightness}
           disabled={controlsDisabled}
@@ -77,7 +95,11 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
         <Button
           size="icon"
           variant="secondary"
-          onClick={() => onChangeBrightnessByStep(device, 5)}
+          onClick={() => {
+            const next = Math.max(0, Math.min(100, sliderValue + 5))
+            setDraftBrightness(next)
+            onChangeBrightnessByStep(device, 5)
+          }}
           aria-label={t.increase}
           disabled={controlsDisabled}
         >
@@ -86,10 +108,10 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
         <Button
           size="sm"
           variant="secondary"
-          onClick={() => onSetBrightness(device, device.brightness)}
+          onClick={commitBrightness}
           disabled={controlsDisabled}
         >
-          {device.brightness}%
+          {sliderValue}%
         </Button>
       </div>
     </article>

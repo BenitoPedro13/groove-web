@@ -157,6 +157,8 @@ The selected language is persisted locally in the browser.
 - Settings page supports manual device registration by IP when discovery is incomplete.
 - Network/API failures are surfaced through inline error states with retry actions.
 - Loading and empty-state feedback is provided when discovery returns no devices.
+- Background polling is visibility-aware and avoids sync calls when the tab is hidden.
+- Brightness slider uses draft interaction and commits changes on interaction end, reducing request bursts.
 - Service-layer tests live in `lib/govee/__tests__/lan-client.test.ts`.
 
 ## Design and UX principles
