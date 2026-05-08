@@ -16,9 +16,10 @@ type DeviceCardProps = {
 
 export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, onSetBrightness }: DeviceCardProps) {
   const { t } = useLanguage()
+  const controlsDisabled = !device.online
 
   return (
-    <article className="rounded-2xl border border-border/60 bg-card p-4 shadow-sm">
+    <article className="rounded-2xl border border-border/60 bg-card p-4 shadow-sm" aria-label={device.name}>
       <div className="mb-4 flex items-start justify-between">
         <div>
           <p className="text-base font-semibold">{device.name}</p>
@@ -42,17 +43,23 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
         </p>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button size="sm" variant={device.power === "on" ? "default" : "secondary"} onClick={() => onTogglePower(device)}>
+        <Button
+          size="sm"
+          variant={device.power === "on" ? "default" : "secondary"}
+          onClick={() => onTogglePower(device)}
+          disabled={controlsDisabled}
+        >
           <Power className="mr-1 size-4" />
           {device.power === "on" ? t.turnOff : t.turnOn}
         </Button>
       </div>
-      <div className="mt-3 flex items-center gap-2">
+      <div className="mt-3 flex items-center gap-2" role="group" aria-label={`${device.name} ${t.brightness}`}>
         <Button
           size="icon"
           variant="secondary"
           onClick={() => onChangeBrightnessByStep(device, -5)}
           aria-label={t.decrease}
+          disabled={controlsDisabled}
         >
           <Minus className="size-4" />
         </Button>
@@ -65,12 +72,14 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
           onChange={(event) => onSetBrightness(device, Number(event.target.value))}
           className="h-2 w-full cursor-pointer accent-primary"
           aria-label={t.brightness}
+          disabled={controlsDisabled}
         />
         <Button
           size="icon"
           variant="secondary"
           onClick={() => onChangeBrightnessByStep(device, 5)}
           aria-label={t.increase}
+          disabled={controlsDisabled}
         >
           <Plus className="size-4" />
         </Button>
@@ -78,6 +87,7 @@ export function DeviceCard({ device, onTogglePower, onChangeBrightnessByStep, on
           size="sm"
           variant="secondary"
           onClick={() => onSetBrightness(device, device.brightness)}
+          disabled={controlsDisabled}
         >
           {device.brightness}%
         </Button>

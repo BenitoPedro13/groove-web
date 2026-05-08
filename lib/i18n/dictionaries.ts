@@ -41,6 +41,9 @@ export const dictionaries = {
     syncIdle: "Sincronizado",
     lastSync: "Ultima sincronizacao",
     connectionErrorTitle: "Falha de conexao",
+    noDevicesTitle: "Nenhum dispositivo encontrado",
+    noDevicesMessage: "Verifique sua rede local ou tente sincronizar novamente.",
+    loadingDevices: "Carregando dispositivos...",
   },
   en: {
     appName: "Groove",
@@ -82,5 +85,8 @@ export const dictionaries = {
     syncIdle: "Synced",
     lastSync: "Last sync",
     connectionErrorTitle: "Connection failed",
+    noDevicesTitle: "No devices found",
+    noDevicesMessage: "Check your local network or try syncing again.",
+    loadingDevices: "Loading devices...",
   },
 } as const

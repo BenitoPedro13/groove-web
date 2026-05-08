@@ -146,6 +146,7 @@ The selected language is persisted locally in the browser.
 - The UI syncs devices from `/api/devices` on startup and periodically (15s).
 - Device actions (power/brightness) are persisted through `/api/devices/[id]/state`.
 - Network/API failures are surfaced through inline error states with retry actions.
+- Loading and empty-state feedback is provided when discovery returns no devices.
 - Service-layer tests live in `lib/govee/__tests__/lan-client.test.ts`.
 
 ## Design and UX principles
@@ -154,6 +155,7 @@ The selected language is persisted locally in the browser.
 - Clear interaction affordances for frequent actions
 - Fast, glanceable device status
 - Progressive enhancement toward real-time and LAN-native behavior
+- Accessible controls with descriptive labels and disabled states for offline devices
 
 ## Roadmap
 

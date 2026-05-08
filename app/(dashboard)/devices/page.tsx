@@ -25,6 +25,12 @@ export default function DevicesPage() {
         </div>
       </header>
       {error ? <ErrorState title={t.connectionErrorTitle} message={error} actionLabel={t.retry} onAction={() => void syncDevices()} /> : null}
+      {!error && isSyncing && devices.length === 0 ? (
+        <div className="rounded-2xl border border-border/70 bg-muted/30 p-4 text-sm text-muted-foreground">{t.loadingDevices}</div>
+      ) : null}
+      {!error && !isSyncing && devices.length === 0 ? (
+        <ErrorState title={t.noDevicesTitle} message={t.noDevicesMessage} actionLabel={t.syncNow} onAction={() => void syncDevices()} />
+      ) : null}
       <div className="grid gap-4 lg:grid-cols-2">
         {devices.map((device) => (
           <DeviceCard

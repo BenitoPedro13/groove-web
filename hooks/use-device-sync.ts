@@ -53,11 +53,11 @@ export function useDeviceSync() {
         throw new Error(payload.error ?? "Failed to update device.")
       }
 
-      setDevices(devices.map((device) => (device.id === id ? payload.data! : device)))
+      setDevices((current) => current.map((device) => (device.id === id ? payload.data! : device)))
       setError(null)
       setLastSyncedAt(new Date())
     },
-    [devices, setDevices],
+    [setDevices],
   )
 
   useEffect(() => {
