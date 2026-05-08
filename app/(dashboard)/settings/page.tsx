@@ -1,12 +1,18 @@
+"use client"
+
+import { useLanguage } from "@/components/providers/language-provider"
+
 export default function SettingsPage() {
+  const { t } = useLanguage()
+
   return (
     <section className="space-y-6">
       <header>
-        <h1 className="text-2xl font-semibold">Settings</h1>
-        <p className="text-sm text-muted-foreground">Configura IP manual, preferencia de tema e opcoes da LAN.</p>
+        <h1 className="text-2xl font-semibold">{t.settingsTitle}</h1>
+        <p className="text-sm text-muted-foreground">{t.settingsSubtitle}</p>
       </header>
       <div className="rounded-2xl border border-border/60 bg-card p-4 text-sm text-muted-foreground">
-        Proxima iteracao: formulario de IP fallback, scan interval e credenciais por dispositivo.
+        {t.settingsNextStep}
       </div>
     </section>
   )

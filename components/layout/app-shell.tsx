@@ -4,15 +4,16 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Bot, House, Lightbulb, Settings, Sparkles } from "lucide-react"
 
+import { useLanguage } from "@/components/providers/language-provider"
 import { cn } from "@/lib/utils"
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: House },
-  { href: "/devices", label: "Devices", icon: Lightbulb },
-  { href: "/scenes", label: "Scenes", icon: Sparkles },
-  { href: "/automations", label: "Automations", icon: Bot },
-  { href: "/settings", label: "Settings", icon: Settings },
-]
+  { href: "/", labelKey: "navDashboard", icon: House },
+  { href: "/devices", labelKey: "navDevices", icon: Lightbulb },
+  { href: "/scenes", labelKey: "navScenes", icon: Sparkles },
+  { href: "/automations", labelKey: "navAutomations", icon: Bot },
+  { href: "/settings", labelKey: "navSettings", icon: Settings },
+] as const
 
 type AppShellProps = {
   children: React.ReactNode
@@ -20,13 +21,27 @@ type AppShellProps = {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname()
+  const { language, setLanguage, t } = useLanguage()
 
   return (
     <div className="mx-auto flex min-h-svh w-full max-w-6xl bg-background">
       <aside className="hidden w-64 flex-col border-r border-border/70 px-4 py-6 md:flex">
-        <p className="mb-8 text-xl font-semibold">Groove</p>
+        <div className="mb-8 space-y-3">
+          <p className="text-xl font-semibold">{t.appName}</p>
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            {t.language}
+            <select
+              value={language}
+              onChange={(event) => setLanguage(event.target.value as "pt" | "en")}
+              className="rounded-md border border-border/70 bg-background px-2 py-1 text-xs text-foreground"
+            >
+              <option value="pt">Português</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+        </div>
         <nav className="space-y-2">
-          {navItems.map(({ href, label, icon: Icon }) => {
+          {navItems.map(({ href, labelKey, icon: Icon }) => {
             const active = pathname === href
             return (
               <Link
@@ -38,7 +53,7 @@ export function AppShell({ children }: AppShellProps) {
                 )}
               >
                 <Icon className="size-4" />
-                {label}
+                {t[labelKey]}
               </Link>
             )
           })}
@@ -49,7 +64,7 @@ export function AppShell({ children }: AppShellProps) {
       </main>
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border/70 bg-background/95 px-2 py-2 backdrop-blur md:hidden">
         <div className="mx-auto grid max-w-lg grid-cols-5 gap-1">
-          {navItems.map(({ href, label, icon: Icon }) => {
+          {navItems.map(({ href, labelKey, icon: Icon }) => {
             const active = pathname === href
             return (
               <Link
@@ -61,7 +76,7 @@ export function AppShell({ children }: AppShellProps) {
                 )}
               >
                 <Icon className="size-4" />
-                {label}
+                {t[labelKey]}
               </Link>
             )
           })}
