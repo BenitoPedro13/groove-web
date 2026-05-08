@@ -30,6 +30,7 @@ Groove Web addresses this gap with:
 - Internal Next.js API routes for device listing and state updates
 - Mock-first LAN service layer for safe development without hardware
 - Manual IP fallback flow for devices that are not discovered automatically
+- Model adapter registry for progressive real-LAN integration by device family
 
 ## Architecture at a glance
 
@@ -126,7 +127,11 @@ pnpm build
 
 Use this checklist before tagging a release:
 
-- Run Lighthouse on mobile profile against a production build (`pnpm build && pnpm start`).
+- Run Lighthouse on mobile profile against a production build (never `next dev`).
+- Recommended flow:
+  - `pnpm build`
+  - `pnpm exec next start -p 3001`
+  - `pnpm dlx lighthouse "http://localhost:3001" --chrome-flags="--headless" --only-categories=performance,accessibility,best-practices,seo`
 - Verify no critical accessibility errors (labels, contrast, focus visibility, tap targets).
 - Confirm there are no layout shifts during first paint and initial device sync.
 - Validate interaction latency on brightness controls and device toggle actions.
@@ -155,6 +160,20 @@ Registers a manual device for LAN fallback scenarios.
 - `ip` (required, valid IPv4)
 - `name` (optional)
 - `model` (optional)
+
+## LAN adapter architecture
+
+The LAN control layer supports model-aware adapters:
+
+- `lib/govee/adapters/types.ts`: adapter contract
+- `lib/govee/adapters/registry.ts`: adapter resolution by model
+- `lib/govee/adapters/mock-rgbic-adapter.ts`: baseline adapter for `H6*` models
+
+You can disable adapter execution through:
+
+- `GOVEE_LAN_ADAPTER_ENABLED=false`
+
+When no adapter matches a model, the system falls back to in-memory patch behavior.
 
 ## Internationalization
 

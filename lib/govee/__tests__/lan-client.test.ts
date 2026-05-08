@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest"
 
 import { goveeLanClient, resetLanClientState } from "../lan-client"
 import { validateDeviceStatePatch, validateManualDeviceInput } from "../validators"
+import { listRegisteredAdapters, resolveAdapter } from "../adapters/registry"
 
 describe("govee lan client", () => {
   beforeEach(() => {
@@ -34,6 +35,17 @@ describe("govee lan client", () => {
 
     const devices = await goveeLanClient.listDevices()
     expect(devices.some((item) => item.ip === "192.168.1.99")).toBe(true)
+  })
+})
+
+describe("model adapter registry", () => {
+  it("resolves adapter for H6 models", () => {
+    const adapter = resolveAdapter("H619C")
+    expect(adapter).not.toBeNull()
+  })
+
+  it("lists at least one registered adapter", () => {
+    expect(listRegisteredAdapters().length).toBeGreaterThan(0)
   })
 })
 
