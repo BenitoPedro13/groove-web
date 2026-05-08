@@ -82,6 +82,8 @@ Example markdown snippet:
 ![Brightness Control](docs/media/brightness-control.gif)
 ```
 
+PRs use a default template with a screenshot checklist at `.github/pull_request_template.md`.
+
 ## Getting started
 
 ### Prerequisites
