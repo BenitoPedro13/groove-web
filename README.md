@@ -116,6 +116,22 @@ pnpm lint
 pnpm test
 ```
 
+Build production bundle locally before release:
+
+```bash
+pnpm build
+```
+
+## Lighthouse mobile checklist
+
+Use this checklist before tagging a release:
+
+- Run Lighthouse on mobile profile against a production build (`pnpm build && pnpm start`).
+- Verify no critical accessibility errors (labels, contrast, focus visibility, tap targets).
+- Confirm there are no layout shifts during first paint and initial device sync.
+- Validate interaction latency on brightness controls and device toggle actions.
+- Capture and store the audit report summary in the pull request description.
+
 ## API overview
 
 ### `GET /api/devices`
