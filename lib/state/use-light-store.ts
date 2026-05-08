@@ -9,6 +9,7 @@ type LightState = {
   devices: LightDevice[]
   scenes: Scene[]
   selectedDeviceId?: string
+  setDevices: (devices: LightDevice[]) => void
   setSelectedDevice: (id: string) => void
   setPower: (id: string, power: DevicePower) => void
   setBrightness: (id: string, brightness: number) => void
@@ -19,6 +20,7 @@ export const useLightStore = create<LightState>((set) => ({
   devices: mockDevices,
   scenes: mockScenes,
   selectedDeviceId: mockDevices[0]?.id,
+  setDevices: (devices) => set({ devices }),
   setSelectedDevice: (id) => set({ selectedDeviceId: id }),
   setPower: (id, power) =>
     set((state) => ({

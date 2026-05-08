@@ -112,6 +112,7 @@ Run static analysis before opening a pull request:
 ```bash
 pnpm typecheck
 pnpm lint
+pnpm test
 ```
 
 ## API overview
@@ -128,6 +129,8 @@ Updates device state with partial payload support:
 - `brightness` (`0-100`)
 - `color` (hex string)
 
+The route validates payloads and returns clear `400` responses for invalid data.
+
 ## Internationalization
 
 Language dictionaries are defined in `lib/i18n/dictionaries.ts` and exposed through a client language provider.  
@@ -137,6 +140,13 @@ Current supported locales:
 - `en` (English)
 
 The selected language is persisted locally in the browser.
+
+## Device synchronization and resilience
+
+- The UI syncs devices from `/api/devices` on startup and periodically (15s).
+- Device actions (power/brightness) are persisted through `/api/devices/[id]/state`.
+- Network/API failures are surfaced through inline error states with retry actions.
+- Service-layer tests live in `lib/govee/__tests__/lan-client.test.ts`.
 
 ## Design and UX principles
 

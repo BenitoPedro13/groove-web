@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: hardening-tests
     content: Adicionar tratamento de erro/reconexão, testes essenciais e refinos de performance/acessibilidade.
-    status: pending
+    status: completed
 isProject: false
 ---
 

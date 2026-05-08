@@ -1,24 +1,29 @@
 import { NextResponse } from "next/server"
 
-import type { DevicePower } from "@/lib/domain/types"
 import { goveeLanClient } from "@/lib/govee/lan-client"
+import { validateDeviceStatePatch } from "@/lib/govee/validators"
 
 type Params = {
   params: Promise<{ id: string }>
 }
 
 export async function PATCH(req: Request, { params }: Params) {
-  const { id } = await params
-  const body = (await req.json()) as {
-    power?: DevicePower
-    brightness?: number
-    color?: string
-  }
+  try {
+    const { id } = await params
+    const body = (await req.json()) as unknown
+    const validation = validateDeviceStatePatch(body)
 
-  const next = await goveeLanClient.updateDeviceState(id, body)
-  if (!next) {
-    return NextResponse.json({ error: "Device not found" }, { status: 404 })
-  }
+    if (!validation.ok) {
+      return NextResponse.json({ error: validation.error }, { status: 400 })
+    }
 
-  return NextResponse.json({ data: next })
+    const next = await goveeLanClient.updateDeviceState(id, validation.value)
+    if (!next) {
+      return NextResponse.json({ error: "Device not found" }, { status: 404 })
+    }
+
+    return NextResponse.json({ data: next })
+  } catch {
+    return NextResponse.json({ error: "Failed to update device state." }, { status: 500 })
+  }
 }

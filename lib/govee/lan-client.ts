@@ -40,3 +40,7 @@ export class GoveeLanClient {
 }
 
 export const goveeLanClient = new GoveeLanClient()
+
+export function resetLanClientState() {
+  inMemoryStates.clear()
+}
