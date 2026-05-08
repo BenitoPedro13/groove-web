@@ -7,6 +7,8 @@ export type DeviceStatePatch = {
 }
 
 const HEX_COLOR_REGEX = /^#(?:[0-9a-fA-F]{3}){1,2}$/
+const IPV4_REGEX =
+  /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$/
 
 export function validateDeviceStatePatch(input: unknown): { ok: true; value: DeviceStatePatch } | { ok: false; error: string } {
   if (typeof input !== "object" || input === null) {
@@ -45,4 +47,29 @@ export function validateDeviceStatePatch(input: unknown): { ok: true; value: Dev
   }
 
   return { ok: true, value: next }
+}
+
+export function validateManualDeviceInput(
+  input: unknown,
+): { ok: true; value: { ip: string; name?: string; model?: string } } | { ok: false; error: string } {
+  if (typeof input !== "object" || input === null) {
+    return { ok: false, error: "Payload must be an object." }
+  }
+
+  const payload = input as Record<string, unknown>
+  if (typeof payload.ip !== "string" || !IPV4_REGEX.test(payload.ip)) {
+    return { ok: false, error: "A valid IPv4 address is required." }
+  }
+
+  const name = typeof payload.name === "string" && payload.name.trim() ? payload.name.trim() : undefined
+  const model = typeof payload.model === "string" && payload.model.trim() ? payload.model.trim() : undefined
+
+  return {
+    ok: true,
+    value: {
+      ip: payload.ip,
+      name,
+      model,
+    },
+  }
 }

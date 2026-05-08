@@ -29,6 +29,7 @@ Groove Web addresses this gap with:
 - Built-in bilingual interface support (Portuguese and English)
 - Internal Next.js API routes for device listing and state updates
 - Mock-first LAN service layer for safe development without hardware
+- Manual IP fallback flow for devices that are not discovered automatically
 
 ## Architecture at a glance
 
@@ -131,6 +132,14 @@ Updates device state with partial payload support:
 
 The route validates payloads and returns clear `400` responses for invalid data.
 
+### `POST /api/devices`
+
+Registers a manual device for LAN fallback scenarios.
+
+- `ip` (required, valid IPv4)
+- `name` (optional)
+- `model` (optional)
+
 ## Internationalization
 
 Language dictionaries are defined in `lib/i18n/dictionaries.ts` and exposed through a client language provider.  
@@ -145,6 +154,7 @@ The selected language is persisted locally in the browser.
 
 - The UI syncs devices from `/api/devices` on startup and periodically (15s).
 - Device actions (power/brightness) are persisted through `/api/devices/[id]/state`.
+- Settings page supports manual device registration by IP when discovery is incomplete.
 - Network/API failures are surfaced through inline error states with retry actions.
 - Loading and empty-state feedback is provided when discovery returns no devices.
 - Service-layer tests live in `lib/govee/__tests__/lan-client.test.ts`.
